@@ -12,6 +12,7 @@ class MKPSolver:
         raise NotImplementedError
 
     def print(self):
+        return
         print("Solved by " + self.solver_name + ":")
         print(self.instance.n)
         print(self.instance.m)
