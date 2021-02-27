@@ -20,11 +20,13 @@ class MKPInstance:
         self.n = instance[0]
         self.m = instance[1]
         self.optmal_value = instance[2]
-        self.p = instance[3 : 3 + self.n]
-        self.constraints_matrix = np.array(
-            instance[3 + self.n : 3 + self.n + self.n * self.m]
-        ).reshape(self.n, self.m)
-        self.b = instance[
-            3 + self.n + self.n * self.m : 3 + self.n + self.n * self.m + self.m
-        ]
+        self.c = np.array(instance[3 : 3 + self.n])
+        self.A = np.array(instance[3 + self.n : 3 + self.n + self.n * self.m]).reshape(
+            self.m, self.n
+        )
+        self.b = np.array(
+            instance[
+                3 + self.n + self.n * self.m : 3 + self.n + self.n * self.m + self.m
+            ]
+        )
         # return (n, m, optmal_value, p, constraints_matrix, b)

@@ -13,11 +13,11 @@ class MKPSolver:
 
     def print(self):
         print("Solved by " + self.solver_name + ":")
-        # print(self.instance.n)
-        # print(self.instance.m)
-        # print(self.instance.optmal_value)
-        # print(self.instance.p)
-        # print(self.instance.constraints_matrix)
-        # print(self.instance.b)
+        print(self.instance.n)
+        print(self.instance.m)
+        print(self.instance.optmal_value)
+        print(self.instance.c)
+        print(self.instance.A)
+        print(self.instance.b)
 
         print(self.found_solution)
