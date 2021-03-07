@@ -3,10 +3,15 @@ from MKPInstance import MKPInstance
 from MKHEUR import MKHEUR
 from CustomMKH import CustomMKH
 
-instance = MKPInstance("instances-chubeas/OR5x100/OR5x100-0.25_1.dat")
+instances = []
+
+
+instance = MKPInstance("instances-chubeas/OR30x500/OR30x500-0.25_1.dat")
 
 mkheur = MKHEUR(instance)
-# custom = CustomMKH(instance)
+custom = CustomMKH(instance)
 
 result = mkheur.solve()
-# result2 = custom.solve()
+print(result)
+result2 = custom.solve()
+print(result2)

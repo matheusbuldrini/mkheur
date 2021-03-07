@@ -1,6 +1,7 @@
 from MKPsolver import MKPSolver
 import scipy.optimize as op
 import numpy as np
+import time
 
 
 class MKHEUR(MKPSolver):
@@ -9,11 +10,10 @@ class MKHEUR(MKPSolver):
         self.solver_name = "MKHEUR"
 
     def solve(self):
-        self.procedure_MKHEUR()
-        # self._procedure_1()
-        self.found_solution = 42
-        self.print()
-        return self.found_solution
+        start_time = time.time()
+        self.found_solution = self.procedure_MKHEUR()
+        self.time = time.time() - start_time
+        return self.found_solution, self.time
 
     def _solve_single_constraint_continous_kp(Ai, c, bi):
         Z = 10
@@ -29,7 +29,7 @@ class MKHEUR(MKPSolver):
         # use bisection
         return NotImplementedError
 
-    def _procedure_1(self):
+    def _procedure_1(self, K=100):
 
         m = self.instance.m
         n = self.instance.n
@@ -64,7 +64,7 @@ class MKHEUR(MKPSolver):
 
         current_surrogate_constraint = i_star
 
-        for nao_sei in range(10):  # TO DO
+        for nao_sei in range(1):  # TO DO
             """2 - Determine the amount by which xbar violates each constraint of Problem IP. If none are
             violated, stop with the current surrogate constraint and corresponding upper-bound
             value Zbar (optimal surrogate multipliers are found for linear programming relaxation
@@ -78,14 +78,16 @@ class MKHEUR(MKPSolver):
                 violation_amounts.append(np.dot(A[i], xbar) - b[i])
 
             if violation_amounts <= [0 for _ in range(len(violation_amounts))]:
-                # stop with the current surrogate constraint and corresponding upper-bound value Zbar
+                # If none are violated, stop with the current surrogate
+                # constraint and corresponding upper-bound value Zbar
                 # TO DO
                 print("cabou")
                 break
                 raise NotImplementedError
                 pass
             else:
-                # If one or more constraints are violated, identify constraint i' (iprime) that is the most violated one.
+                # If one or more constraints are violated, identify
+                # constraint i' (iprime) that is the most violated one.
                 iprime = 0
                 for i in range(m):
                     if violation_amounts[i] > violation_amounts[iprime]:
@@ -132,7 +134,7 @@ class MKHEUR(MKPSolver):
 
             def _find_minimum(f):  # TO DO: use bisection
                 min = float("inf")
-                for o in range(1, 100):
+                for o in range(1, K):
                     res = Z_S(o)
                     if res[0] < min:
                         min_mi = o
@@ -143,15 +145,15 @@ class MKHEUR(MKPSolver):
             mibar, Zbar, xbar = _find_minimum(Z_S)
 
             # print(A[current_surrogate_constraint])
-            A[current_surrogate_constraint] = np.dot(vec_mi, A) + np.dot(
-                mibar, A[iprime]
-            )
+            # A[current_surrogate_constraint] = np.dot(vec_mi, A) + np.dot(
+            #    mibar, A[iprime]
+            # )
 
             vec_mi[current_surrogate_constraint] = mibar
             # print(A[current_surrogate_constraint])
             # print(vec_mi)
             # print(mibar, Zbar, xbar)
-        print(vec_mi)
+        # print(vec_mi)
         return vec_mi
 
     def procedure_MKHEUR(self):
@@ -162,7 +164,8 @@ class MKHEUR(MKPSolver):
         c = self.instance.c
 
         # (1) Determine a set of surrogate multipliers using Procedure 1
-        mi = [1, 1, 1, 1, 1]  # self._procedure_1()
+        mi = [1 for _ in range(len(b))]  # self._procedure_1()
+        # mi2 = self._procedure_1()
 
         # (2) Calculate c_j/(mi A)_j, ratios.
         # Sort and renumber variables according to decreasing order of these ratios.
@@ -218,4 +221,4 @@ class MKHEUR(MKPSolver):
                     best_obj_val = new_sol_obj_val
 
         # print(best_xbar)
-        print(best_obj_val)
+        return best_obj_val

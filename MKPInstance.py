@@ -29,4 +29,3 @@ class MKPInstance:
                 3 + self.n + self.n * self.m : 3 + self.n + self.n * self.m + self.m
             ]
         )
-        # return (n, m, optmal_value, p, constraints_matrix, b)
