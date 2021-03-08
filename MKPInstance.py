@@ -17,6 +17,7 @@ class MKPInstance:
             for i in line.split():
                 instance.append(int(i))
 
+        self.file_path = file_path
         self.n = instance[0]
         self.m = instance[1]
         self.optmal_value = instance[2]

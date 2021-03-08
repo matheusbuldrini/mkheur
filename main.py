@@ -10,15 +10,21 @@ for root, dirs, files in os.walk("instances-chubeas", topdown=False):
     for name in files:
         instances.append(MKPInstance(os.path.join(root, name)))
 
+print("FILE \t VALUE \t TIME \t MOD_VALUE \t MOD_TIME")
 for instance in instances:
-    print("m=" + str(instance.m))
-    print("n=" + str(instance.n))
     mkheur = MKHEUR(instance)
     custom = CustomMKH(instance)
-
     result = mkheur.solve()
-    print("obj_fun=" + str(result[0]))
-    print("time=" + str(result[1]))
     result2 = custom.solve()
-    print("mod_obj_fun=" + str(result2[0]))
-    print("mod_time=" + str(result2[1]))
+
+    print(
+        os.path.split(instance.file_path)[-1][2:-4]
+        + "\t"
+        + str(result[0])
+        + "\t "
+        + str(result[1])
+        + "\t "
+        + str(result2[0])
+        + "\t "
+        + str(result2[1])
+    )
